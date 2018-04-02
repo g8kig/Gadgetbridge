@@ -313,11 +313,33 @@ public class FileUtils {
 
     /**
      * Replaces some wellknown invalid characters in the given filename
-     * to underscrores.
+     * to underscores.
      * @param name the file name to make valid
      * @return the valid file name
      */
     public static String makeValidFileName(String name) {
-        return name.replaceAll("\0/:\\r\\n\\\\", "_");
+        final StringBuilder sb = new StringBuilder();
+        boolean slashAdded = false;
+        for (int idx = 0; idx < name.length(); ++idx) {
+            final char ch = name.charAt(idx);
+            switch (ch) {
+                case ':':
+                case '+':
+                case '\0':
+                case '\r':
+                case '\n':
+                case '\\':
+                    if (!slashAdded) {
+                        sb.append('_');
+                    }
+                    slashAdded = true;
+                    break;
+                default:
+                    slashAdded = false;
+                    sb.append(ch);
+                    break;
+            }
+        }
+        return sb.toString();
     }
 }

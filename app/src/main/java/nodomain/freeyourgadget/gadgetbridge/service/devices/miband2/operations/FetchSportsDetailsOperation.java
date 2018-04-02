@@ -106,11 +106,15 @@ public class FetchSportsDetailsOperation extends AbstractFetchOperation {
                     summary.setGpxTrack(targetFile.getAbsolutePath());
                     dbHandler.getDaoSession().getBaseActivitySummaryDao().update(summary);
                 }
+
                 GregorianCalendar endTime = BLETypeConversions.createCalendar();
                 endTime.setTime(summary.getEndTime());
                 saveLastSyncTimestamp(endTime);
-            } catch (Exception ex) {
+            } catch (NullPointerException ex) {
+                ex.printStackTrace();
                 GB.toast(getContext(), "Error getting activity details: " + ex.getMessage(), Toast.LENGTH_LONG, GB.ERROR, ex);
+            } catch (Exception ex) {
+                GB.toast(getContext(), "Exception getting activity details: " + ex.getMessage(), Toast.LENGTH_LONG, GB.ERROR, ex);
             }
         }
 

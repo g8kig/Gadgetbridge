@@ -29,7 +29,7 @@ public class GPXExporter implements ActivityTrackExporter {
     private static final String NS_TRACKPOINT_EXTENSION_URI = "http://www.garmin.com/xmlschemas/TrackPointExtension/v1";
     private static final String NS_XSI_URI = "http://www.w3.org/2001/XMLSchema-instance";
 
-    private String creator;
+    private String creator = "";
     private boolean includeHeartRate = true;
 
     @NonNull
@@ -58,8 +58,14 @@ public class GPXExporter implements ActivityTrackExporter {
 
             ser.endTag(NS_DEFAULT, "gpx");
             ser.endDocument();
+        } catch (NullPointerException ex) {
+            ex.printStackTrace();
         } finally {
-            ser.flush();
+            try {
+                ser.flush();
+            } catch (NullPointerException ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
@@ -100,18 +106,18 @@ public class GPXExporter implements ActivityTrackExporter {
 
     private void exportTrackPoint(XmlSerializer ser, ActivityPoint point, String source) throws IOException {
         GPSCoordinate location = point.getLocation();
-        if (location == null) {
-            return; // skip invalid points, that just contain hr data, for example
-        }
         ser.startTag(NS_DEFAULT, "trkpt");
-        ser.attribute(NS_DEFAULT, "lon", formatLocation(location.getLongitude()));
-        ser.attribute(NS_DEFAULT, "lat", formatLocation(location.getLatitude()));
-        ser.startTag(NS_DEFAULT, "ele").text(formatLocation(location.getAltitude())).endTag(NS_DEFAULT, "ele");
+        if (location != null) {
+            ser.attribute(NS_DEFAULT, "lon", formatLocation(location.getLongitude()));
+            ser.attribute(NS_DEFAULT, "lat", formatLocation(location.getLatitude()));
+            ser.startTag(NS_DEFAULT, "ele").text(formatLocation(location.getAltitude())).endTag(NS_DEFAULT, "ele");
+        }
         ser.startTag(NS_DEFAULT, "time").text(formatTime(point.getTime())).endTag(NS_DEFAULT, "time");
         String description = point.getDescription();
         if (description != null) {
             ser.startTag(NS_DEFAULT, "desc").text(description).endTag(NS_DEFAULT, "desc");
         }
+
         ser.startTag(NS_DEFAULT, "src").text(source).endTag(NS_DEFAULT, "src");
 
         exportTrackpointExtensions(ser, point);

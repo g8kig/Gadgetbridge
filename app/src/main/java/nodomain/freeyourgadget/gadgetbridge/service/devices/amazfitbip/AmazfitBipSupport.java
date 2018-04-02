@@ -123,11 +123,6 @@ public class AmazfitBipSupport extends MiBand2Support {
     }
 
     @Override
-    public void handleButtonEvent() {
-        // ignore
-    }
-
-    @Override
     protected AmazfitBipSupport setDisplayItems(TransactionBuilder builder) {
         /*
         LOG.info("Enabling all display items");

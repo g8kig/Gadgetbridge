@@ -33,26 +33,25 @@ import nodomain.freeyourgadget.gadgetbridge.GBApplication;
 
 public class DateTimeUtils {
     private static SimpleDateFormat DAY_STORAGE_FORMAT = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-    public static SimpleDateFormat ISO_8601_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ssXXX", Locale.US);
+    public static SimpleDateFormat ISO_8601_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ssZ", Locale.US);
 
     public static String formatDateTime(Date date) {
         return DateUtils.formatDateTime(GBApplication.getContext(), date.getTime(), DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_NO_YEAR);
     }
 
     public static String formatIso8601(Date date) {
-        return ISO_8601_FORMAT.format(date);
+        String result = "";
+        try {
+            final String formattedDate = ISO_8601_FORMAT.format(date);
+            final int len = formattedDate.length() - 2;
+            result = formattedDate.substring(0, len).concat(":".concat(formattedDate.substring(len)));
+        } catch(Exception ex) {
+        }
+        return result;
     }
 
     public static String formatDate(Date date) {
         return DateUtils.formatDateTime(GBApplication.getContext(), date.getTime(), DateUtils.FORMAT_SHOW_DATE);
-//        long dateMillis = date.getTime();
-//        if (isToday(dateMillis)) {
-//            return "Today";
-//        }
-//        if (isYesterday(dateMillis)) {
-//            return "Yesterday";
-//        }
-//        DateFormat.getDateInstance(DateFormat.SHORT).format(date);
     }
 
     public static String formatDurationHoursMinutes(long duration, TimeUnit unit) {

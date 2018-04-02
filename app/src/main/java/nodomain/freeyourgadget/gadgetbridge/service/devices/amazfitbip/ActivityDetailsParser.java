@@ -149,9 +149,6 @@ public class ActivityDetailsParser {
         int v6 = BLETypeConversions.toUint16(bytes[offset + 5]);
 
         if (v2 == 0 && v3 == 0 && v4 == 0 && v5 == 0 && v6 == 0) {
-            // new version
-//            LOG.info("detected heart rate in 'new' version, where version is: " + summary.getVersion());
-            LOG.info("detected heart rate in 'new' version format");
             ActivityPoint ap = getActivityPointFor(timeOffsetSeconds);
             ap.setHeartRate(v1);
             add(ap);

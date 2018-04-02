@@ -923,7 +923,6 @@ public class MiBand2Support extends AbstractBTLEDeviceSupport {
         }
 
         currentButtonActionId = 0;
-
         currentButtonPressCount = 0;
         currentButtonPressTime = System.currentTimeMillis();
     }

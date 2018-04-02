@@ -132,6 +132,7 @@ public class ActivitySummariesActivity extends AbstractListActivity<BaseActivity
 
     private void showTrack(String gpxTrack) {
         try {
+            GB.toast(this, "View file: " + gpxTrack, Toast.LENGTH_LONG, GB.INFO, null);
             AndroidUtils.viewFile(gpxTrack, Intent.ACTION_VIEW, this);
         } catch (IOException e) {
             GB.toast(this, "Unable to display GPX track: " + e.getMessage(), Toast.LENGTH_LONG, GB.ERROR, e);
